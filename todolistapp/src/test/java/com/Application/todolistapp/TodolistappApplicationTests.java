@@ -1,4 +1,4 @@
-package com.InterviewPrep.todolistapp;
+package com.Application.todolistapp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

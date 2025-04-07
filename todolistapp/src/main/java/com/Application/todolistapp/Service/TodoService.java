@@ -12,7 +12,7 @@ import java.util.List;
 
 
 @Service
-public class TodoService {
+public class   TodoService {
 
    private final TodoRepository taskrepository;
    public TodoService(TodoRepository taskrepository){
@@ -59,5 +59,18 @@ public class TodoService {
 
     }
 
+    public TodoRespDTO deleteTasksService(int id){
+        var findRequestedElement = taskrepository.findById(id);
+        Todo requestedelement= null;
+        if(findRequestedElement != null){
+             requestedelement= findRequestedElement.get();
+            taskrepository.deleteById(id);
+        }
+        var ToDoRespdto = new TodoRespDTO();
+        ToDoRespdto.setId(requestedelement.getId());
+        ToDoRespdto.setTaskName(requestedelement.getTaskName());
+
+        return ToDoRespdto;
+    }
 
 }

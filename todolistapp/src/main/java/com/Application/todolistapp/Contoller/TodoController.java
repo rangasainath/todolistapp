@@ -34,4 +34,10 @@ public class TodoController {
         return todoservice.getAllTasksService();
     }
 
+    @DeleteMapping("api/v1/task/delete")
+    public TodoRespDTO deletetasksController(@RequestParam(value="taskid", required=true)int id){
+         System.out.println("This is from delete tasks function");
+         return todoservice.deleteTasksService(id);
+    }
+
 }
