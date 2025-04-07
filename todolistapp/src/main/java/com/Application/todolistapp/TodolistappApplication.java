@@ -1,4 +1,4 @@
-package com.InterviewPrep.todolistapp;
+package com.Application.todolistapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

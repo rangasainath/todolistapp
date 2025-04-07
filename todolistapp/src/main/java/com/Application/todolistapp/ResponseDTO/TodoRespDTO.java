@@ -1,4 +1,4 @@
-package com.InterviewPrep.todolistapp.ResponseDTO;
+package com.Application.todolistapp.ResponseDTO;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,6 @@
-package com.InterviewPrep.todolistapp.Repository;
+package com.Application.todolistapp.Repository;
 
-import com.InterviewPrep.todolistapp.Entity.Todo;
+import com.Application.todolistapp.Entity.Todo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

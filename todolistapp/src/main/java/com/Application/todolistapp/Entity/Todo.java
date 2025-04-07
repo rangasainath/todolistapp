@@ -1,4 +1,4 @@
-package com.InterviewPrep.todolistapp.Entity;
+package com.Application.todolistapp.Entity;
 
 
 import jakarta.persistence.Entity;
@@ -16,7 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Todo {
     @Id
-//    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="userId_Generator")
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
 //    @SequenceGenerator( name="userId_Generator", sequenceName="userId_Sequence", initialValue=1, allocationSize=5)
     int id;
     String taskName;
