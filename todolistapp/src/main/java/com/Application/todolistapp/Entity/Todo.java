@@ -20,5 +20,8 @@ public class Todo {
 //    @SequenceGenerator( name="userId_Generator", sequenceName="userId_Sequence", initialValue=1, allocationSize=5)
     int id;
     String taskName;
+    String description;
+    String status;
+
 
 }

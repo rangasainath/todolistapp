@@ -11,6 +11,8 @@ public class TodoRespDTO {
 
     int id;
     String taskName;
+    String description;
+    String status;
 
 }
 

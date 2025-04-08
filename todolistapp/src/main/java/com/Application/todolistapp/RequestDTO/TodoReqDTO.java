@@ -11,5 +11,7 @@ public class TodoReqDTO {
 
     int id;
     String taskName;
+    String description;
+    String status;
 
 }
