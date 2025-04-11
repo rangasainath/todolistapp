@@ -4,14 +4,18 @@ import com.Application.todolistapp.Entity.Todo;
 import com.Application.todolistapp.Repository.TodoRepository;
 import com.Application.todolistapp.RequestDTO.TodoReqDTO;
 import com.Application.todolistapp.ResponseDTO.TodoRespDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
+@Slf4j
 public class   TodoService {
 
    private final TodoRepository taskrepository;
@@ -20,7 +24,9 @@ public class   TodoService {
    }
 
 
-   public TodoRespDTO createTaskService(TodoReqDTO taskreqdto){
+   public TodoRespDTO createTodos(TodoReqDTO taskreqdto){
+       log.debug("This is debug message");
+
       var task = new Todo();
       task.setTaskName(taskreqdto.getTaskName());
       task.setDescription(taskreqdto.getDescription());
@@ -29,28 +35,32 @@ public class   TodoService {
       var taskrespdto = new TodoRespDTO();
       taskrespdto.setId(task1.getId());
       taskrespdto.setTaskName(task1.getTaskName());
-       taskrespdto.setDescription(task1.getDescription());
-       taskrespdto.setStatus(task1.getStatus());
-      return taskrespdto;
+      taskrespdto.setDescription(task1.getDescription());
+      taskrespdto.setStatus(task1.getStatus());
+      taskrespdto.setCreationTime(task1.getCreationTime());
 
+      return taskrespdto;
    }
 
 
-  public TodoRespDTO getTaskService(int id){
+  public TodoRespDTO getTodos(int id){
 
       var fetchedToDo= taskrepository.findById(id);
       Todo todo = fetchedToDo.get();
       var TodoRespDTO = new TodoRespDTO();
       TodoRespDTO.setId(todo.getId());
       TodoRespDTO.setTaskName(todo.getTaskName());
+      TodoRespDTO.setDescription(todo.getDescription());
+      TodoRespDTO.setStatus(todo.getStatus());
+      TodoRespDTO.setCreationTime(todo.getCreationTime());
       return TodoRespDTO;
 
 
   }
 
-    public List<TodoRespDTO> getAllTasksService(){
+    public List<TodoRespDTO> getAllTodos(){
 
-        var fetchedToDo= taskrepository.findAll(Sort.by(Sort.Order.asc("taskName")));
+        var fetchedToDo= taskrepository.findAll(Sort.by(Sort.Order.asc("creationTime")));
         List<Todo> todo = fetchedToDo.stream().toList();
         List<TodoRespDTO> todorespdto = new ArrayList<TodoRespDTO>();
         for(Todo todoele : todo){
@@ -59,13 +69,14 @@ public class   TodoService {
             TodoRespDTO.setTaskName(todoele.getTaskName());
             TodoRespDTO.setDescription(todoele.getDescription());
             TodoRespDTO.setStatus(todoele.getStatus());
+            TodoRespDTO.setCreationTime(todoele.getCreationTime());
             todorespdto.add(TodoRespDTO);
         }
         return todorespdto;
 
     }
 
-    public TodoRespDTO deleteTasksService(int id){
+    public TodoRespDTO deleteTodos(int id){
         var findRequestedElement = taskrepository.findById(id);
         Todo requestedelement= null;
         if(findRequestedElement != null){
@@ -77,11 +88,12 @@ public class   TodoService {
         ToDoRespdto.setTaskName(requestedelement.getTaskName());
         ToDoRespdto.setDescription(requestedelement.getDescription());
         ToDoRespdto.setStatus(requestedelement.getStatus());
+        ToDoRespdto.setCreationTime(requestedelement.getCreationTime());
         return ToDoRespdto;
     }
 
 
-    public List<TodoRespDTO> deleteallTasksService(){
+    public List<TodoRespDTO> deleteallTodos(){
        var tasks= taskrepository.findAll();
         List<Todo> todotasks = tasks.stream().toList();
         List<TodoRespDTO> todorespdto = new ArrayList<TodoRespDTO>();
@@ -93,19 +105,58 @@ public class   TodoService {
             todorespdtoobj.setTaskName(todo.getTaskName());
             todorespdtoobj.setDescription(todo.getDescription());
             todorespdtoobj.setStatus(todo.getStatus());
+            todorespdtoobj.setCreationTime(todo.getCreationTime());
             todorespdto.add(todorespdtoobj);
         }
-
+        taskrepository.deleteAll();
         return todorespdto;
     }
 
-    public TodoRespDTO updateTasksService(TodoReqDTO todoreqdto){
+
+    public List<TodoRespDTO> deletemultipleTodos(int[] arr){
+        List<Todo> todotasks = new ArrayList<Todo>();
+        List<TodoRespDTO> todorespdto = new ArrayList<TodoRespDTO>();
+       for(int i: arr) {
+           var tasks = taskrepository.findById(i);
+           Todo todo=tasks.get();
+           TodoRespDTO todorespdtoobj = new TodoRespDTO();
+           todorespdtoobj.setId(todo.getId());
+           todorespdtoobj.setTaskName((todo.getTaskName()));
+           todorespdtoobj.setStatus(todo.getStatus());
+           todorespdtoobj.setDescription(todo.getDescription());
+           todorespdtoobj.setCreationTime(todo.getCreationTime());
+           todorespdto.add(todorespdtoobj);
+           taskrepository.deleteById(i);
+
+       }
+//       Iterable<Integer> i=arr;
+
+//        taskrepository.deleteAllByIdInBatch(arr);
+       return todorespdto;
+
+   }
+
+
+   public void deletebatchTodos(List<Integer> todoids)
+   {
+//       List<Integer> arrOfIds= new ArrayList<Integer>();
+//       int arr[];
+//        for(TodoReqDTO todoreq: todoids)
+//        {
+//            arrOfIds.add(todoreq.getId());
+//        }
+//Iterable<Integer> iterable =   Arrays.stream(arrOfIds.toArray()).collect(Collectors.toList());
+       Iterable<Integer> iterable = todoids;
+       taskrepository.deleteAllByIdInBatch(iterable);
+       System.out.println("All todos got deleted.");
+   }
+
+    public TodoRespDTO updateTodos(TodoReqDTO todoreqdto){
        var fetchedElement = taskrepository.findById(todoreqdto.getId());
 
         TodoRespDTO todorespdto = new TodoRespDTO();
        if(fetchedElement!=null){
            Todo todo = fetchedElement.get();
-
            todo.setTaskName(todoreqdto.getTaskName());
            todo.setDescription(todoreqdto.getDescription());
            todo.setStatus(todoreqdto.getStatus());
@@ -114,6 +165,7 @@ public class   TodoService {
            todorespdto.setTaskName(savedtodo.getTaskName());
            todorespdto.setDescription(savedtodo.getDescription());
            todorespdto.setStatus(savedtodo.getStatus());
+           todorespdto.setCreationTime(savedtodo.getCreationTime());
        }
        return todorespdto;
 

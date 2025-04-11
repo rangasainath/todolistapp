@@ -1,14 +1,14 @@
 package com.Application.todolistapp.Entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -22,6 +22,9 @@ public class Todo {
     String taskName;
     String description;
     String status;
+//    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp()
+    LocalDateTime creationTime;
 
 
 }
