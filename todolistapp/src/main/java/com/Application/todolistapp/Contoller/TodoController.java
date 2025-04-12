@@ -5,12 +5,14 @@ import com.Application.todolistapp.ResponseDTO.TodoRespDTO;
 import com.Application.todolistapp.Service.TodoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-public class TodoController {
+public class TodoController  {
      TodoService todoservice;
      Logger logger = LoggerFactory.getLogger(TodoController.class);
      public TodoController(TodoService todoservice){
@@ -20,6 +22,7 @@ public class TodoController {
 
     @PostMapping("api/v1/todo/")
     public TodoRespDTO createTodo(@RequestBody TodoReqDTO taskreqdto)
+
     {
        logger.trace("This function is going to createtodos-tracemessage");
        logger.info("This function is going to createtodo-infomessage");
@@ -32,7 +35,9 @@ public class TodoController {
        logger.error("this is an exception",except);
        logger.warn("this is warning message");
        logger.info("API run has started.");
-       return todoservice.createTodos(taskreqdto);
+       TodoRespDTO todorespdto = todoservice.createTodos(taskreqdto);
+
+       return todorespdto;
     }
 
    @GetMapping("api/v1/todo/")
