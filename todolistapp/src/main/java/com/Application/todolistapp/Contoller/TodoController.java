@@ -30,9 +30,9 @@ public class TodoController  {
        logger.debug("This function is going to createtodo-debugmessage");
        logger.error("This function is going to createtodo-errormessage");
        logger.info("this is info message form createtodo {}  ,  {}", 500, 400);
-       var except = new Exception("sample exception");
+//       var except = new Exception("sample exception");
 
-       logger.error("this is an exception",except);
+//       logger.error("this is an exception",except);
        logger.warn("this is warning message");
        logger.info("API run has started.");
        TodoRespDTO todorespdto = todoservice.createTodos(taskreqdto);

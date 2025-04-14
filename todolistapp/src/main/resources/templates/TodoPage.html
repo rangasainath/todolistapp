@@ -8,6 +8,8 @@
 
 <div>
     <a th:href="@{/createtodo}">Add new element</a>
+    <a th:href="@{/directtologinform}">Login</a>
+    <a th:href="@{/directtosignup}">SignUp</a>
     <Legend>list of tasks</Legend>
     <th:block th:each="todo:${todos}">
     <div>

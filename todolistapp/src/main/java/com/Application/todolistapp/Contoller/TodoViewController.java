@@ -3,6 +3,7 @@ package com.Application.todolistapp.Contoller;
 
 import com.Application.todolistapp.Entity.Todo;
 import com.Application.todolistapp.RequestDTO.TodoReqDTO;
+import com.Application.todolistapp.RequestDTO.UserReqDTO;
 import com.Application.todolistapp.ResponseDTO.TodoRespDTO;
 import com.Application.todolistapp.Service.TodoService;
 import org.springframework.stereotype.Controller;
@@ -49,4 +50,31 @@ public class TodoViewController{
          model.addAttribute("todoreqdto", new TodoReqDTO());
          return "createnewTask";
     }
+
+    @GetMapping("/directtologinform")
+    public String loginUser(Model model){
+         model.addAttribute("userReqDTO",new UserReqDTO());
+         return "LoginForm";
+    }
+
+    @PostMapping("/authentication1")
+    public String authenticate(@ModelAttribute("userReqDTO")UserReqDTO userReqDTO){
+        boolean authenticationCheck =todoservice.Authentication(userReqDTO);
+        // model.addAttribute("userreqdto",new UserReqDTO());
+        return "redirect:/getdata";
+    }
+
+    @GetMapping("/directtosignup")
+    public String signUp(Model model){
+        model.addAttribute("userReqDTO",new UserReqDTO());
+        return "signupForm";
+    }
+    @PostMapping("/signup")
+    public String signup(@ModelAttribute("userReqDTO")UserReqDTO userReqDTO){
+         todoservice.signUp(userReqDTO);
+        // model.addAttribute("userreqdto",new UserReqDTO());
+        return "redirect:/getdata";
+    }
+
+
 }

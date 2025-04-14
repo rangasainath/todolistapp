@@ -1,9 +1,13 @@
 package com.Application.todolistapp.Service;
 
 import com.Application.todolistapp.Entity.Todo;
+import com.Application.todolistapp.Entity.User;
 import com.Application.todolistapp.Repository.TodoRepository;
+import com.Application.todolistapp.Repository.UserRepository;
 import com.Application.todolistapp.RequestDTO.TodoReqDTO;
+import com.Application.todolistapp.RequestDTO.UserReqDTO;
 import com.Application.todolistapp.ResponseDTO.TodoRespDTO;
+import com.Application.todolistapp.ResponseDTO.UserRespDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -19,8 +23,10 @@ import java.util.stream.Collectors;
 public class   TodoService {
 
    private final TodoRepository taskrepository;
-   public TodoService(TodoRepository taskrepository){
+   private final UserRepository userrepository;
+   public TodoService(TodoRepository taskrepository, UserRepository userrepository){
       this.taskrepository= taskrepository;
+      this.userrepository = userrepository;
    }
 
 
@@ -169,6 +175,37 @@ public class   TodoService {
        }
        return todorespdto;
 
+    }
+
+
+    public boolean Authentication(UserReqDTO userreqdto){
+       UserRespDTO userrespdto = new UserRespDTO();
+       var query= userrepository.findUserByEmailidAndPassword(userreqdto.getEmailid(), userreqdto.getPassword());
+//       var queriedpassword = userrepository.findUserBypassword(userreqdto.getPassword());
+//       if(userrespdto.getEmailid() == userreqdto.getEmailid() && userrespdto.getPassword() == userreqdto.getEmailid()){
+//
+//       }
+       if(query!=null){
+           return true;
+       }
+       else{
+           return false;
+       }
+
+    }
+
+
+    public void signUp(UserReqDTO userreqdto){
+
+       User user = new User();
+       user.setName(userreqdto.getName());
+       user.setEmailid(userreqdto.getEmailid());
+       user.setPhoneNo(userreqdto.getPhoneNo());
+       user.setPassword(userreqdto.getPassword());
+       var saved_user= userrepository.save(user);
+       if(saved_user != null) {
+           log.trace("user got saved with the details:" + saved_user);
+       }
     }
 
 }
