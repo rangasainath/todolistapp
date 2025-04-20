@@ -24,17 +24,17 @@ public class TodoController  {
     public TodoRespDTO createTodo(@RequestBody TodoReqDTO taskreqdto)
 
     {
-       logger.trace("This function is going to createtodos-tracemessage");
-       logger.info("This function is going to createtodo-infomessage");
-       logger.warn("This function is going to createtodo-warnmessage");
-       logger.debug("This function is going to createtodo-debugmessage");
-       logger.error("This function is going to createtodo-errormessage");
-       logger.info("this is info message form createtodo {}  ,  {}", 500, 400);
+//       logger.trace("This function is going to createtodos-tracemessage");
+//       logger.info("This function is going to createtodo-infomessage");
+//       logger.warn("This function is going to createtodo-warnmessage");
+//       logger.debug("This function is going to createtodo-debugmessage");
+//       logger.error("This function is going to createtodo-errormessage");
+//       logger.info("this is info message form createtodo {}  ,  {}", 500, 400);
 //       var except = new Exception("sample exception");
 
 //       logger.error("this is an exception",except);
-       logger.warn("this is warning message");
-       logger.info("API run has started.");
+//       logger.warn("this is warning message");
+//       logger.info("API run has started.");
        TodoRespDTO todorespdto = todoservice.createTodos(taskreqdto);
 
        return todorespdto;

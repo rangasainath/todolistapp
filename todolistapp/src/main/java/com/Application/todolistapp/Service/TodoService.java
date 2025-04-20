@@ -1,7 +1,7 @@
 package com.Application.todolistapp.Service;
 
 import com.Application.todolistapp.Entity.Todo;
-import com.Application.todolistapp.Entity.User;
+import com.Application.todolistapp.Entity.User1;
 import com.Application.todolistapp.Repository.TodoRepository;
 import com.Application.todolistapp.Repository.UserRepository;
 import com.Application.todolistapp.RequestDTO.TodoReqDTO;
@@ -13,9 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -197,7 +195,7 @@ public class   TodoService {
 
     public void signUp(UserReqDTO userreqdto){
 
-       User user = new User();
+       User1 user = new User1();
        user.setName(userreqdto.getName());
        user.setEmailid(userreqdto.getEmailid());
        user.setPhoneNo(userreqdto.getPhoneNo());
