@@ -1,5 +1,6 @@
 package com.Application.todolistapp.Util;
 
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -26,4 +27,21 @@ public class JWTUtility {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
+
+    public String validateAndExtractUsername(String token) {
+       try{
+       return Jwts.parser()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+    catch(JwtException e)
+    {
+        return null;
+    }
+    }
+
+
 }

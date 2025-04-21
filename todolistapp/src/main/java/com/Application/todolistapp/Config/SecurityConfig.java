@@ -1,6 +1,8 @@
 package com.Application.todolistapp.Config;
 
 import com.Application.todolistapp.Filters.JWTAuthenticationFilter;
+import com.Application.todolistapp.Filters.JWTValidationFilter;
+import com.Application.todolistapp.JWTAuthenticationProvider;
 import com.Application.todolistapp.Util.JWTUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +41,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationmanager, JWTUtility jwtutil) throws Exception {
         JWTAuthenticationFilter jwtauthfilter = new JWTAuthenticationFilter(authenticationmanager, jwtutil);
+        JWTValidationFilter   jwtvalidfilter =  new JWTValidationFilter(authenticationmanager);
         http
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/signup").permitAll()
@@ -57,6 +60,7 @@ public class SecurityConfig {
 
                 .csrf(csrf -> csrf.disable())
                 .addFilterBefore(jwtauthfilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtvalidfilter, JWTAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults());
 
 
@@ -74,9 +78,18 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(){
-        return new ProviderManager(Arrays.asList(daoAuthenticationProvider()));
+    public JWTAuthenticationProvider jwtAuthenticationProvider(){
+        return new JWTAuthenticationProvider(jwtUtil, userDetailsService);
     }
+
+    @Bean
+    public AuthenticationManager authenticationManager(){
+        return new ProviderManager(Arrays.asList(daoAuthenticationProvider(),jwtAuthenticationProvider()));
+    }
+
+
+
+
 
 
 
