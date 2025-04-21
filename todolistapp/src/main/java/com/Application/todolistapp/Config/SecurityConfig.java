@@ -1,6 +1,7 @@
 package com.Application.todolistapp.Config;
 
 import com.Application.todolistapp.Filters.JWTAuthenticationFilter;
+import com.Application.todolistapp.Filters.JWTRefreshFilter;
 import com.Application.todolistapp.Filters.JWTValidationFilter;
 import com.Application.todolistapp.JWTAuthenticationProvider;
 import com.Application.todolistapp.Util.JWTUtility;
@@ -42,10 +43,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationmanager, JWTUtility jwtutil) throws Exception {
         JWTAuthenticationFilter jwtauthfilter = new JWTAuthenticationFilter(authenticationmanager, jwtutil);
         JWTValidationFilter   jwtvalidfilter =  new JWTValidationFilter(authenticationmanager);
+        JWTRefreshFilter jwtrefreshfilter = new JWTRefreshFilter(authenticationmanager,jwtutil);
         http
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/signup").permitAll()
-                                .requestMatchers("/createtodo").hasRole("USER")
+                                //.requestMatchers("/createtodo").hasRole("USER")
                                 .anyRequest().authenticated()
                 )
 
@@ -61,6 +63,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .addFilterBefore(jwtauthfilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(jwtvalidfilter, JWTAuthenticationFilter.class)
+                .addFilterAfter(jwtrefreshfilter,JWTValidationFilter.class)
                 .httpBasic(Customizer.withDefaults());
 
 

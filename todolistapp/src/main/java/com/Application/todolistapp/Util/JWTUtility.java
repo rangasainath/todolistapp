@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
 
 @Component
 public class JWTUtility {
@@ -20,7 +21,12 @@ public class JWTUtility {
    }
 
     public String generateToken(String username, long expiryMinutes){
+        HashMap<String, Object> TokenObject = new HashMap<String, Object>();
+        TokenObject.put("TeskKey","123");
+        TokenObject.put("TeskKey2",456);
+
         return  Jwts.builder()
+                .setClaims(TokenObject)
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis()+expiryMinutes*60*1000))
