@@ -6,13 +6,39 @@
 </head>
 <body>
 
-<form th:action="@{/signup}" th:object="${userReqDTO}" method="post">
-        <input type="Text" name="name" th:field="*{Name}">
+<form th:action="@{/api/signup}" th:object="${userauthReqDTO}" method="post">
+        <input type="Text" name="username" th:field="*{username}">
         <input type="Text" name="emailid" th:field="*{emailid}">
         <input type="Text" name="password" th:field="*{password}">
-        <input type="number" name="phoneno" th:field="*{phoneNo}">
+        <input type="text" name="role" th:field="*{role}">
         <input type="submit" name="submit"/>
 </form>
+
+<!--<form th:action="@{/generate-token}" method="post" id="loginForm">-->
+<!--    <div class="form-group">-->
+<!--        <label for ="username">Username</label>-->
+<!--        <input type="text" class="form-control" id="username" name="username" required>-->
+<!--    </div>-->
+<!--    <div class="form-group">-->
+<!--        <label for="password">Password</label>-->
+<!--        <input type="text" class="form-control" id="password" name="password" required>-->
+<!--    </div>-->
+
+<!--    <div class="form-group">-->
+<!--        <label for="password">Password</label>-->
+<!--        <input type="text" class="form-control" id="emailid" name="password" required>-->
+<!--    </div>-->
+
+<!--    <div class="form-group">-->
+<!--        <label for="phoneNo">phoneNo</label>-->
+<!--        <input type="text" class="form-control" id="phoneNo" name="password" required>-->
+<!--    </div>-->
+<!--    <button type="submit" class="btn btn-primary btn-block">Login</button>-->
+<!--    <div id="errorMessage" class="alert alert-danger mt-3" style="display: none;"></div>-->
+<!--</form>-->
+
+
+
 
 </body>
 </html>

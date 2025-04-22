@@ -4,6 +4,7 @@ import com.Application.todolistapp.RequestDTO.JwtAuthenticationToken;
 import com.Application.todolistapp.Util.JWTUtility;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,12 +45,25 @@ public class JWTValidationFilter extends OncePerRequestFilter {
 
 
     private String extractJwtFormRequest(HttpServletRequest request){
-        String bearerToken = request.getHeader("Authorization");
-        if(bearerToken != null && bearerToken.startsWith("Bearer ")){
-            return bearerToken.substring(7);
+//        String bearerToken = request.getHeader("Authorization");
+//        if(bearerToken != null && bearerToken.startsWith("Bearer ")){
+//            return bearerToken.substring(7);
+//
+//        }
 
+        Cookie[] cookies = request.getCookies();
+        if(cookies == null){
+            return null;
         }
-        return null;
+        String refreshToken = null;
+        for(Cookie cookie : cookies){
+            if("tempToken". equals(cookie.getName())){
+                refreshToken = cookie.getValue();
+            }
+        }
+        return refreshToken;
+
+
     }
 
 }

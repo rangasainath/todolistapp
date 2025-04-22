@@ -5,10 +5,57 @@
     <title>LoginForm</title>
 </head>
 <body>
-<form th:action="@{/authentication1}" th:object="${userReqDTO}" method="post">
-    <input type="email" name="emailid" th:field="*{emailid}"/>
-    <input type="text" name="password" th:field="*{password}"/>
-    <input type="submit" name="submit"/>
+
+<!--<form th:action="@{/generate-token}" th:object="${loginerequest}" method="post">-->
+<!--    <input type="text" name="username" th:field="*{username}"/>-->
+<!--    <input type="text" name="password" th:field="*{password}"/>-->
+<!--    <input type="submit" name="submit"/>-->
+<!--</form>-->
+
+<form th:action="@{/generate-token}" method="post" id="loginForm">
+    <div class="form-group">
+        <label for ="username">Username</label>
+        <input type="text" class="form-control" id="username" name="username" required>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="text" class="form-control" id="password" name="password" required>
+    </div>
+  <button type="submit" class="btn btn-primary btn-block">Login</button>
+     <div id="errorMessage" class="alert alert-danger mt-3" style="display: none;"></div>
 </form>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async function(event)
+    {
+
+
+     event.preventDefault();
+     const username = document.getElementById('username').value;
+     const password = document.getElementById('password').value;
+     console.log(JSON.stringify({ username, password }));
+     const response = await fetch('/generate-token', {
+     method:'POST',
+     headers:{
+             'Content-Type':'application/json'
+     },
+     body: JSON.stringify({ username, password })
+     });
+
+      if(response.ok){
+      window.location.href='/getdata';//Redirect to homepage or another secured page, http://localhost:8085
+     }
+     else{
+     const errorMessage = document.getElementByID('errorMessage');
+     errorMessage.textContent = 'Login failed, Please check you username and password.';
+     errorMessage.style.display ='block';
+     }
+
+    });
+</script>
+
+
+
+
 </body>
 </html>

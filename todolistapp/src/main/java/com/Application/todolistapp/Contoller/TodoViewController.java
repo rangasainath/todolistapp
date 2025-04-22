@@ -2,7 +2,9 @@ package com.Application.todolistapp.Contoller;
 
 
 import com.Application.todolistapp.Entity.Todo;
+import com.Application.todolistapp.RequestDTO.LoginRequest;
 import com.Application.todolistapp.RequestDTO.TodoReqDTO;
+import com.Application.todolistapp.RequestDTO.UserAuthreqDTO;
 import com.Application.todolistapp.RequestDTO.UserReqDTO;
 import com.Application.todolistapp.ResponseDTO.TodoRespDTO;
 import com.Application.todolistapp.Service.TodoService;
@@ -20,6 +22,12 @@ public class TodoViewController{
      TodoViewController(TodoService todoservice){
          this.todoservice = todoservice;
      }
+
+    @GetMapping("/home")
+    public String homePage(Model model){
+
+        return "Home";
+    }
 
     @GetMapping("/getdata")
      public String getTodo(Model model){
@@ -50,10 +58,10 @@ public class TodoViewController{
          model.addAttribute("todoreqdto", new TodoReqDTO());
          return "createnewTask";
     }
-
+//Authentication controllers.
     @GetMapping("/directtologinform")
     public String loginUser(Model model){
-         model.addAttribute("userReqDTO",new UserReqDTO());
+         model.addAttribute("loginerequest",new LoginRequest());
          return "LoginForm";
     }
 
@@ -66,8 +74,8 @@ public class TodoViewController{
 
     @GetMapping("/directtosignup")
     public String signUp(Model model){
-        model.addAttribute("userReqDTO",new UserReqDTO());
-        return "signupForm";
+        model.addAttribute("userauthReqDTO",new UserAuthreqDTO());
+        return "SignupForm";
     }
     @PostMapping("/signup")
     public String signup(@ModelAttribute("userReqDTO")UserReqDTO userReqDTO){

@@ -47,6 +47,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/signup").permitAll()
+                                .requestMatchers("/home").permitAll()
+                                .requestMatchers("/directtologinform").permitAll()
+                                .requestMatchers("/directtosignup").permitAll()
                                 //.requestMatchers("/createtodo").hasRole("USER")
                                 .anyRequest().authenticated()
                 )
@@ -63,8 +66,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .addFilterBefore(jwtauthfilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(jwtvalidfilter, JWTAuthenticationFilter.class)
-                .addFilterAfter(jwtrefreshfilter,JWTValidationFilter.class)
-                .httpBasic(Customizer.withDefaults());
+                .addFilterAfter(jwtrefreshfilter,JWTValidationFilter.class);
+//                .httpBasic(Customizer.withDefaults());
 
 
 

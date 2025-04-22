@@ -25,6 +25,11 @@ public class UserAuthEntity implements UserDetails {
 
     private String role;
 
+    private String emailid;
+
+    @Column(updatable = false)
+    private String createdby;
+
    @Override
     public Collection<? extends GrantedAuthority> getAuthorities(){
 
@@ -61,7 +66,13 @@ public class UserAuthEntity implements UserDetails {
     }
 
 
+    public Long getId(){
+       return id;
+    }
 
+    public void setId(Long id){
+       this.id = id;
+    }
     public void  setUsername(String username){
         this.username = username;
     }
@@ -88,6 +99,18 @@ public class UserAuthEntity implements UserDetails {
        this.role= role;
     }
 
+    public String getcreatedby(){
+       return createdby;
+    }
+
+    public String getEmailid(){
+       return emailid;
+    }
+
+
+    public void setEmailid(String emailid){
+        this.emailid= emailid;
+    }
 
 
 }

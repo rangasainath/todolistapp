@@ -1,5 +1,6 @@
 package com.Application.todolistapp.Util;
 
+import com.Application.todolistapp.Entity.UserAuthEntity;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,11 +21,9 @@ public class JWTUtility {
 
    }
 
-    public String generateToken(String username, long expiryMinutes){
+    public String generateToken(String username, long expiryMinutes, UserAuthEntity userauth){
         HashMap<String, Object> TokenObject = new HashMap<String, Object>();
-        TokenObject.put("TeskKey","123");
-        TokenObject.put("TeskKey2",456);
-
+        TokenObject.put("userId",userauth.getId());
         return  Jwts.builder()
                 .setClaims(TokenObject)
                 .setSubject(username)

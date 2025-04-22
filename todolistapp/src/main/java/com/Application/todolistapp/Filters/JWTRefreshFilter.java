@@ -1,5 +1,6 @@
 package com.Application.todolistapp.Filters;
 
+import com.Application.todolistapp.Entity.UserAuthEntity;
 import com.Application.todolistapp.RequestDTO.JwtAuthenticationToken;
 import com.Application.todolistapp.Util.JWTUtility;
 import io.jsonwebtoken.io.IOException;
@@ -40,7 +41,7 @@ public class JWTRefreshFilter extends OncePerRequestFilter {
         JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(refreshToken);
         Authentication authResult = authenticationmanger.authenticate(authenticationToken);
         if(authResult.isAuthenticated()){
-            String newToken = jwtutil.generateToken(authResult.getName(),15);
+            String newToken = jwtutil.generateToken(authResult.getName(),15,(UserAuthEntity)authResult.getPrincipal());
             response.setHeader("Authorization", "Bearer "+newToken);
         }
     }

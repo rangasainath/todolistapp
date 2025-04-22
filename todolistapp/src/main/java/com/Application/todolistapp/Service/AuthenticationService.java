@@ -19,6 +19,7 @@ public class AuthenticationService implements UserDetailsService {
         UserAuthEntity userauthentity = new UserAuthEntity();
         userauthentity.setUsername(userauthreqdto.getUsername());
         userauthentity.setPassword(userauthreqdto.getPassword());
+        userauthentity.setEmailid(userauthreqdto.getEmailid());
         userauthentity.setRole(userauthreqdto.getRole());
         return userauthenticationrepo.save(userauthentity);
     }

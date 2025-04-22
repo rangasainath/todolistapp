@@ -1,5 +1,6 @@
 package com.Application.todolistapp.Filters;
 
+import com.Application.todolistapp.Entity.UserAuthEntity;
 import com.Application.todolistapp.RequestDTO.LoginRequest;
 import com.Application.todolistapp.Util.JWTUtility;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,23 +35,33 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
-        LoginRequest loginrequest = objectMapper.readValue(request.getInputStream(),LoginRequest.class);
+        var customloginrequest =  request.getInputStream();
+        LoginRequest loginrequest = objectMapper.readValue( customloginrequest,LoginRequest.class);
 
         UsernamePasswordAuthenticationToken auth =   new UsernamePasswordAuthenticationToken(loginrequest.getUsername(), loginrequest.getPassword());
 
         Authentication authResult = authenticationManager.authenticate(auth);
+        //System.out.println(authResult.getDetails());
 
         if(authResult.isAuthenticated()){
-            String token = jwtutil.generateToken(authResult.getName(), 15);
+            String token = jwtutil.generateToken(authResult.getName(), 15, (UserAuthEntity) authResult.getPrincipal());
+            //setting temporary token.
             response.setHeader("Authorization", "Bearer "+ token);
-
-            String refreshToken=jwtutil.generateToken(authResult.getName(), 7*24*60);
+            Cookie temporaryCookie = new Cookie("tempToken", token);
+            temporaryCookie.setHttpOnly(true);
+            temporaryCookie.setSecure(true);
+            temporaryCookie.setPath("/");
+            temporaryCookie.setMaxAge(15*60);
+            response.addCookie(temporaryCookie);
+            //setting refresh token.
+            String refreshToken=jwtutil.generateToken(authResult.getName(), 7*24*60, (UserAuthEntity) authResult.getPrincipal());
             Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
             refreshCookie.setHttpOnly(true);
             refreshCookie.setSecure(true);
-            refreshCookie.setPath("/refresh-token");
+            refreshCookie.setPath("/");
             refreshCookie.setMaxAge(7*24*60*60);
             response.addCookie(refreshCookie);
+//            response.sendRedirect("/getdata");
         }
 
     }
