@@ -40,6 +40,7 @@ public class JWTRefreshFilter extends OncePerRequestFilter {
 
         JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(refreshToken);
         Authentication authResult = authenticationmanger.authenticate(authenticationToken);
+
         if(authResult.isAuthenticated()){
             String newToken = jwtutil.generateToken(authResult.getName(),15,(UserAuthEntity)authResult.getPrincipal());
             response.setHeader("Authorization", "Bearer "+newToken);

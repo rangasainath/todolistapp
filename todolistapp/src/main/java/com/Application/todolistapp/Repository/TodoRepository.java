@@ -10,6 +10,7 @@ import java.util.List;
 public interface TodoRepository extends JpaRepository<Todo,Integer> {
 
     public List<Todo> findAll();
+    public List<Todo> findTodoBycreatedby(int id);
 
 
 }

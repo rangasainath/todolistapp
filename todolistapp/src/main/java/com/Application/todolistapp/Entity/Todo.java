@@ -17,7 +17,7 @@ import java.util.Date;
 public class Todo {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-//    @SequenceGenerator( name="userId_Generator", sequenceName="userId_Sequence", initialValue=1, allocationSize=5)
+    @SequenceGenerator( name="userId_Generator", sequenceName="userId_Sequence", initialValue=1, allocationSize=5)
     int id;
     String taskName;
     String description;
@@ -25,6 +25,9 @@ public class Todo {
 //    @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp()
     LocalDateTime creationTime;
+
+    int createdby;
+
 
 
 

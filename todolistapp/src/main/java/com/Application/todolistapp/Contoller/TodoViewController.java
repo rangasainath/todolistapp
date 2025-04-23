@@ -2,12 +2,14 @@ package com.Application.todolistapp.Contoller;
 
 
 import com.Application.todolistapp.Entity.Todo;
+import com.Application.todolistapp.Entity.UserAuthEntity;
 import com.Application.todolistapp.RequestDTO.LoginRequest;
 import com.Application.todolistapp.RequestDTO.TodoReqDTO;
 import com.Application.todolistapp.RequestDTO.UserAuthreqDTO;
 import com.Application.todolistapp.RequestDTO.UserReqDTO;
 import com.Application.todolistapp.ResponseDTO.TodoRespDTO;
 import com.Application.todolistapp.Service.TodoService;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +32,11 @@ public class TodoViewController{
     }
 
     @GetMapping("/getdata")
-     public String getTodo(Model model){
+     public String getTodo(Model model, SecurityContext securitycontext){
+       UserAuthEntity userAuthEntity =(UserAuthEntity)securitycontext.getAuthentication().getPrincipal();
 
-        List<TodoRespDTO> todorespdto = todoservice.getAllTodos();
+
+       List<TodoRespDTO> todorespdto = todoservice.getTodos(userAuthEntity.getId());
        model.addAttribute("todos", todorespdto);
 
         return "TodoPage";
@@ -46,9 +50,11 @@ public class TodoViewController{
     }
 
     @PostMapping("/postdata")
-    public String createTodo(@ModelAttribute("todoreqdto") TodoReqDTO  todoreqdto,Model model){
+    public String createTodo(@ModelAttribute("todoreqdto") TodoReqDTO  todoreqdto,Model model,SecurityContext securityContext){
       System.out.println("todo:"+ todoreqdto);
-         TodoRespDTO todorespdto = todoservice.createTodos(todoreqdto);
+         UserAuthEntity userAuthEntity = (UserAuthEntity)securityContext.getAuthentication().getPrincipal();
+
+         TodoRespDTO todorespdto = todoservice.createTodos(todoreqdto,userAuthEntity);
 //        model.addAttribute("todos", todorespdto);
          return "redirect:/getdata";
     }

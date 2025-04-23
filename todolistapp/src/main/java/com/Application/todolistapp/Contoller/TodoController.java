@@ -1,14 +1,17 @@
 package com.Application.todolistapp.Contoller;
 
+import com.Application.todolistapp.Entity.UserAuthEntity;
 import com.Application.todolistapp.RequestDTO.TodoReqDTO;
 import com.Application.todolistapp.ResponseDTO.TodoRespDTO;
 import com.Application.todolistapp.Service.TodoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -21,7 +24,7 @@ public class TodoController  {
      }
 
     @PostMapping("api/v1/todo/")
-    public TodoRespDTO createTodo(@RequestBody TodoReqDTO taskreqdto)
+    public TodoRespDTO createTodo(@RequestBody TodoReqDTO taskreqdto,SecurityContext securityContext)
 
     {
 //       logger.trace("This function is going to createtodos-tracemessage");
@@ -35,19 +38,21 @@ public class TodoController  {
 //       logger.error("this is an exception",except);
 //       logger.warn("this is warning message");
 //       logger.info("API run has started.");
-       TodoRespDTO todorespdto = todoservice.createTodos(taskreqdto);
+        UserAuthEntity userAuthEntity = (UserAuthEntity)securityContext.getAuthentication().getPrincipal();
+       TodoRespDTO todorespdto = todoservice.createTodos(taskreqdto,userAuthEntity);
 
        return todorespdto;
     }
 
    @GetMapping("api/v1/todo/")
-   public TodoRespDTO getTodos(@RequestParam(value="userid", required=true)int id){
+   public List<TodoRespDTO> getTodos(@RequestParam(value="userid", required=true)int id){
          System.out.println("id passed by  user:"+id);
          return todoservice.getTodos(id);
    }
 
     @GetMapping("api/v1/todo/getAll")
-    public List<TodoRespDTO> getAllTodos() {
+    public List<TodoRespDTO> getAllTodos(SecurityContext securitycontext) {
+
         System.out.println("This is from get all tasks function");
         return todoservice.getAllTodos();
     }

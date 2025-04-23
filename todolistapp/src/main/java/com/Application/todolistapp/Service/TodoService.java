@@ -2,6 +2,7 @@ package com.Application.todolistapp.Service;
 
 import com.Application.todolistapp.Entity.Todo;
 import com.Application.todolistapp.Entity.User1;
+import com.Application.todolistapp.Entity.UserAuthEntity;
 import com.Application.todolistapp.Repository.TodoRepository;
 import com.Application.todolistapp.Repository.UserRepository;
 import com.Application.todolistapp.RequestDTO.TodoReqDTO;
@@ -28,13 +29,14 @@ public class   TodoService {
    }
 
 
-   public TodoRespDTO createTodos(TodoReqDTO taskreqdto){
+   public TodoRespDTO createTodos(TodoReqDTO taskreqdto, UserAuthEntity userAuthEntity){
        log.debug("This is debug message");
 
       var task = new Todo();
       task.setTaskName(taskreqdto.getTaskName());
       task.setDescription(taskreqdto.getDescription());
       task.setStatus(taskreqdto.getStatus());
+      task.setCreatedby(userAuthEntity.getId());
       var task1 = taskrepository.save(task);
       var taskrespdto = new TodoRespDTO();
       taskrespdto.setId(task1.getId());
@@ -47,23 +49,29 @@ public class   TodoService {
    }
 
 
-  public TodoRespDTO getTodos(int id){
+  public List<TodoRespDTO> getTodos(int id){
 
-      var fetchedToDo= taskrepository.findById(id);
-      Todo todo = fetchedToDo.get();
-      var TodoRespDTO = new TodoRespDTO();
-      TodoRespDTO.setId(todo.getId());
-      TodoRespDTO.setTaskName(todo.getTaskName());
-      TodoRespDTO.setDescription(todo.getDescription());
-      TodoRespDTO.setStatus(todo.getStatus());
-      TodoRespDTO.setCreationTime(todo.getCreationTime());
-      return TodoRespDTO;
+      var fetchedToDo= taskrepository.findTodoBycreatedby(id);
+      List<Todo> todo = fetchedToDo.stream().toList();
+      List<TodoRespDTO> todorespdto = new ArrayList<TodoRespDTO>();
+//      Todo todo = fetchedToDo.get();
+      for(Todo todoele : todo) {
+          var TodoRespDTO = new TodoRespDTO();
+          TodoRespDTO.setId(todoele.getId());
+          TodoRespDTO.setTaskName(todoele.getTaskName());
+          TodoRespDTO.setDescription(todoele.getDescription());
+          TodoRespDTO.setStatus(todoele.getStatus());
+          TodoRespDTO.setCreationTime(todoele.getCreationTime());
+          todorespdto.add(TodoRespDTO);
+      }
+      return todorespdto;
 
 
   }
 
     public List<TodoRespDTO> getAllTodos(){
 
+//        var fetchedToDo= taskrepository.findAll(Sort.by(Sort.Order.asc("creationTime")));
         var fetchedToDo= taskrepository.findAll(Sort.by(Sort.Order.asc("creationTime")));
         List<Todo> todo = fetchedToDo.stream().toList();
         List<TodoRespDTO> todorespdto = new ArrayList<TodoRespDTO>();
@@ -195,7 +203,7 @@ public class   TodoService {
 
     public void signUp(UserReqDTO userreqdto){
 
-       User1 user = new User1();
+       User1   user = new User1();
        user.setName(userreqdto.getName());
        user.setEmailid(userreqdto.getEmailid());
        user.setPhoneNo(userreqdto.getPhoneNo());

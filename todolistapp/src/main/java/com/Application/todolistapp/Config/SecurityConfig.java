@@ -50,6 +50,8 @@ public class SecurityConfig {
                                 .requestMatchers("/home").permitAll()
                                 .requestMatchers("/directtologinform").permitAll()
                                 .requestMatchers("/directtosignup").permitAll()
+                                .requestMatchers("/api/logout").permitAll()
+
                                 //.requestMatchers("/createtodo").hasRole("USER")
                                 .anyRequest().authenticated()
                 )
